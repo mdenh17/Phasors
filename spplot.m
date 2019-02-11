@@ -56,9 +56,9 @@ if nargin == 1
     end
     
 elseif nargin >= 2
-    clrs=['k' , 'r' , 'b'  , 'g' , 'y' , 'c','m'];
-    
-    
+ 
+   
+   clrs = {[0 0.4470 0.7410], 	[0.8500 0.3250 0.0980], [0.9290 0.6940 0.1250], [0.4940 0.1840 0.5560],[0.4660 0.6740 0.1880],[0.3010 0.7450 0.9330],  	[0.6350 0.0780 0.1840]};
     
     
     
@@ -85,6 +85,7 @@ elseif nargin >= 2
             elseif Vinkel < 0
                 pre='X_C:' ;
             else
+                  msg = 'Error occurred.';
                 error(msg)
             end
         elseif contains(inputname(m),'S','IgnoreCase',true)
@@ -108,30 +109,31 @@ elseif nargin >= 2
             enhed = '\Omega';
             pre='Z:';
         else
+              msg = 'Error occurred.';
             error(msg);
         end
         
         
-       
+        
         
         if first == 0
-        for ii=1:1:nargin 
-            O = varargin{ii};
-            if abs(O(1)) > maxval
-                maxval = abs(O(1)); 
-
+            for ii=1:1:nargin
+                O = varargin{ii};
+                if abs(O(1)) > maxval
+                    maxval = abs(O(1));
+                    
+                end
+                
             end
             
-        end
-         
-        
-        
-        max_lim = abs(maxval) ;
-        x_fake=[0 max_lim 0 -max_lim];
-        y_fake=[max_lim 0 -max_lim 0];
-        h_fake=compass(x_fake,y_fake);
-        hold on
-        first = 1;
+            
+            
+            max_lim = abs(maxval) ;
+            x_fake=[0 max_lim 0 -max_lim];
+            y_fake=[max_lim 0 -max_lim 0];
+            h_fake=compass(x_fake,y_fake);
+            hold on
+            first = 1;
         end
         
         
@@ -143,30 +145,30 @@ elseif nargin >= 2
         
         p1=compass(plot);
         if m == nargin
-        set(h_fake,'Visible','off');
-        set(findall(gcf, 'String', '30', '-or','String','60') ,'String', '  ');
-        set(findall(gcf, 'String', '0'),'String', ' ' );
-        set(findall(gcf, 'String', '330'),'String', ' ');
-        set(findall(gcf, 'String', '300'),'String', ' ' );
-        set(findall(gcf, 'String', '270'),'String', ' ');
-        set(findall(gcf, 'String', '240'),'String', ' ' );
-        set(findall(gcf, 'String', '210'),'String', ' ');
-        set(findall(gcf, 'String', '180'),'String', ' ');
-        set(findall(gcf, 'String', '150'),'String', ' ' );
-        set(findall(gcf, 'String', '120'),'String', ' ');
-        set(findall(gcf, 'String', '90'),'String', ' ' );
-        
-        
-        for u=0:1:abs(maxval)*1.5
-            set(findall(gcf, 'String', ['  ' num2str(u)]),'String', '  ');
-        end
+            set(h_fake,'Visible','off');
+            set(findall(gcf, 'String', '30', '-or','String','60') ,'String', '  ');
+            set(findall(gcf, 'String', '0'),'String', ' ' );
+            set(findall(gcf, 'String', '330'),'String', ' ');
+            set(findall(gcf, 'String', '300'),'String', ' ' );
+            set(findall(gcf, 'String', '270'),'String', ' ');
+            set(findall(gcf, 'String', '240'),'String', ' ' );
+            set(findall(gcf, 'String', '210'),'String', ' ');
+            set(findall(gcf, 'String', '180'),'String', ' ');
+            set(findall(gcf, 'String', '150'),'String', ' ' );
+            set(findall(gcf, 'String', '120'),'String', ' ');
+            set(findall(gcf, 'String', '90'),'String', ' ' );
+            
+            
+            for u=0:1:abs(maxval)*1.5
+                set(findall(gcf, 'String', ['  ' num2str(u)]),'String', '  ');
+            end
         end
         
         
         
         string=strcat(num2str(Laengde,'%100.2f'),' \angle ',num2str(Vinkel,'%100.2f'),'^{\circ}');
         p1(1).LineWidth = 2;
-        p1(1).Color=clrs(m);
+        p1(1).Color=clrs{m};
         p1(1).DisplayName=string;
         
         
@@ -184,6 +186,7 @@ elseif nargin >= 2
             text(real(plot)+real(plot)/8,imag(plot)+imag(plot)/8,[pre ' ' num2str(abs(Laengde),'%100.2f') ' ' enhed ' {\angle} ' num2str(Vinkel,'%100.2f') '^{\circ}' ])
             
         else
+              msg = 'Error occurred.';
             error(msg)
             
             
@@ -195,6 +198,7 @@ elseif nargin >= 2
     end
     
 else
+      msg = 'Error occurred.';
     error(msg)
     
     
