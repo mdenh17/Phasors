@@ -1,11 +1,16 @@
 function [ pas ] = spplot(varargin)
 %Plotter phasors
+figure1=figure('Position', [0, 0, 1024, 1200]);
+subplot(2,1,1)
 
 msg =  'Fejl';
 set(0,'DefaultLegendAutoUpdate','off')
-figure;
+
 maxval = 0;
 minval = 0;
+clrs = {[0 0.4470 0.7410], 	[0.8500 0.3250 0.0980], [0.9290 0.6940 0.1250], [0.4940 0.1840 0.5560],[0.4660 0.6740 0.1880],[0.3010 0.7450 0.9330],  	[0.6350 0.0780 0.1840]};
+
+
 first = 0;
 if nargin == 1
     
@@ -58,11 +63,10 @@ if nargin == 1
 elseif nargin >= 2
     
     
-    clrs = {[0 0.4470 0.7410], 	[0.8500 0.3250 0.0980], [0.9290 0.6940 0.1250], [0.4940 0.1840 0.5560],[0.4660 0.6740 0.1880],[0.3010 0.7450 0.9330],  	[0.6350 0.0780 0.1840]};
-    
     
     
     for m=1:1:nargin
+        
         M = varargin{m};
         Vinkel = M(2);
         
@@ -162,7 +166,7 @@ elseif nargin >= 2
             
             for y=1:1:5
                 if y==5
-                    for u=1:1:(abs(maxval)/5)*(y*1.25)
+                    for u=1:1:(abs(maxval)/5)*(y*3)
                         set(findall(gcf, 'String', ['  ' num2str(u)]),'String', '  ');
                     end
                 else
@@ -183,16 +187,16 @@ elseif nargin >= 2
         
         
         if 150 > Vinkel && Vinkel >= 0 || 150 > 360-Vinkel && 360-Vinkel >= 0
-            text(real(plot)+real(plot)/8,imag(plot)+imag(plot)/8,[pre ' ' num2str(abs(Laengde),'%100.2f') ' '  enhed ' {\angle} ' num2str(Vinkel,'%100.2f') '^{\circ}' ])
+            text(real(plot)*1.15,imag(plot)*1.15,[pre ' ' num2str(abs(Laengde),'%100.2f') ' '  enhed ' {\angle} ' num2str(Vinkel,'%100.2f') '^{\circ}' ])
             
         elseif 360 > Vinkel && Vinkel >= 210 || 360 > 360-Vinkel && 360-Vinkel >= 210
-            text(real(plot)+real(plot)/8,imag(plot)+imag(plot)/8,[pre ' ' num2str(abs(Laengde),'%100.2f') ' ' enhed ' {\angle} ' num2str(Vinkel,'%100.2f') '^{\circ}' ])
+            text(real(plot)*1.15,imag(plot)*1.15,[pre ' ' num2str(abs(Laengde),'%100.2f') ' ' enhed ' {\angle} ' num2str(Vinkel,'%100.2f') '^{\circ}' ])
             
         elseif 210 > Vinkel && Vinkel >= 150 || 210 > 360-Vinkel && 360-Vinkel >= 150
-            text(real(plot)+real(plot)/8,imag(plot)+imag(plot)/8,[pre ' ' num2str(abs(Laengde),'%100.2f') ' '  enhed ' {\angle} ' num2str(Vinkel,'%100.2f') '^{\circ}' ])
+            text(real(plot)*1.15,imag(plot)*1.15,[pre ' ' num2str(abs(Laengde),'%100.2f') ' '  enhed ' {\angle} ' num2str(Vinkel,'%100.2f') '^{\circ}' ])
             
         elseif Vinkel < 0 || 360-Vinkel < 0
-            text(real(plot)+real(plot)/8,imag(plot)+imag(plot)/8,[pre ' ' num2str(abs(Laengde),'%100.2f') ' ' enhed ' {\angle} ' num2str(Vinkel,'%100.2f') '^{\circ}' ])
+            
             
         else
             msg = 'Error occurred.';
@@ -200,17 +204,50 @@ elseif nargin >= 2
             
             
         end
-        
-        
-        
-        
+        text(real(plot)*1.15,imag(plot)*1.15,[pre ' ' num2str(abs(Laengde),'%100.2f') ' ' enhed ' {\angle} ' num2str(Vinkel,'%100.2f') '^{\circ}' ])
     end
-    
+    hold off
 else
     msg = 'Error occurred.';
     error(msg)
-    
-    
+    hold off
 end
 hold off
+
+%---------------------------------------------------------------
+firstthis = 0;
+subplot(2,1,2)
+
+for k=1:1:nargin
+    
+    BB = varargin{k};
+    Vinkel1 = BB(2);
+    
+    Laengde1 = BB(1);
+    
+    xt = @(t) Laengde1.*sin(2*pi*t-(deg2rad(Vinkel1)));
+    p2=fplot(xt,[0 2]);
+    
+    grid on
+    ax = gca;
+    ax.XTick =  0:0.25:2;
+    ax.XTickLabel = {'0^\circ','90^\circ','180^\circ','270^\circ','360^\circ','450^\circ','540^\circ','630^\circ','720^\circ'};
+    
+    p2(1).LineWidth = 2;
+    p2(1).Color=clrs{k};
+    
+    hold on
+end
+
+hold off
+
+
+
+
+
+
+
+
+
+
 end
