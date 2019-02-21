@@ -4,7 +4,7 @@ figure1=figure('Position', [0, 0, 1024, 1200]);
 subplot(2,1,1)
 
 msg =  'Fejl';
-set(0,'DefaultLegendAutoUpdate','off')
+
 
 maxval = 0;
 minval = 0;
@@ -60,9 +60,11 @@ if nargin == 1
         error(msg)
     end
     
+    %----------------------------------------------------
+    
+    %----------------------------------------------------
+    
 elseif nargin >= 2
-    
-    
     
     
     for m=1:1:nargin
@@ -75,43 +77,37 @@ elseif nargin >= 2
         if contains(inputname(m),'v','IgnoreCase',true)
             Scale = 1;
             enhed = 'V';
-            pre = strcat(inputname(m), ': ');
+            pre = strcat(inputname(m));
         elseif contains(inputname(m),'I','IgnoreCase',true)
             Scale = 1;
             enhed = 'A';
-            pre = strcat(inputname(m), ': ');
+            pre = strcat(inputname(m));
             
         elseif contains(inputname(m),'X','IgnoreCase',true)
             Scale = 1;
             enhed = '\Omega';
-            if Vinkel > 0
-                pre='X_L:' ;
-            elseif Vinkel < 0
-                pre='X_C:' ;
-            else
-                msg = 'Error occurred.';
-                error(msg)
-            end
+            pre = strcat(inputname(m));
+            
         elseif contains(inputname(m),'S','IgnoreCase',true)
             Scale = 1;
             enhed = 'VA';
-            pre='S:';
+            pre = strcat(inputname(m));
         elseif contains(inputname(m),'Q','IgnoreCase',true)
             Scale = 1;
             enhed = 'VAr';
-            pre='Q:';
+            pre = strcat(inputname(m));
         elseif contains(inputname(m),'P','IgnoreCase',true)
             Scale = 1;
             enhed = 'W';
-            pre='P:';
+            pre = strcat(inputname(m));
         elseif contains(inputname(m),'R','IgnoreCase',true)
             Scale = 1;
             enhed = '\Omega';
-            pre='R:';
+            pre = strcat(inputname(m));
         elseif contains(inputname(m),'Z','IgnoreCase',true)
             Scale = 1;
             enhed = '\Omega';
-            pre='Z:';
+            pre = strcat(inputname(m));
         else
             Scale = 1;
             enhed = ' ';
@@ -144,13 +140,18 @@ elseif nargin >= 2
         
         
         vinkel = @(x) exp(1i*x*pi/180);
-        dummyX=Laengde*Scale;
+        dummyX=(Laengde*Scale);
         plot=dummyX*vinkel(Vinkel);
         
+           
+        %txt=strcat(pre, ' ' ,num2str(abs(Laengde),'%100.2f'), ' ' ,enhed, ' {\angle} ' ,num2str(Vinkel,'%100.2f'), '^{\circ}')
+    
         
         p1=compass(plot);
-        if m == nargin
+        
+            %if m == nargin
             set(h_fake,'Visible','off');
+            %{
             set(findall(gcf, 'String', '30', '-or','String','60') ,'String', '  ');
             set(findall(gcf, 'String', '0'),'String', ' ' );
             set(findall(gcf, 'String', '330'),'String', ' ');
@@ -164,53 +165,31 @@ elseif nargin >= 2
             set(findall(gcf, 'String', '90'),'String', ' ' );
             
             
-            for y=1:1:5
-                if y==5
-                    for u=1:1:(abs(maxval)/5)*(y*3)
+            
+                
+                    for u=0:1/abs(maxval):(abs(maxval))*3
                         set(findall(gcf, 'String', ['  ' num2str(u)]),'String', '  ');
                     end
-                else
-                    for u=1:1:(abs(maxval)/5)*(y)
-                        set(findall(gcf, 'String', ['  ' num2str(u)]),'String', '  ');
-                    end
-                end
-            end
+                
+                
+           
         end
+        %}
         
         
         
-        string=strcat(num2str(Laengde,'%100.2f'),' \angle ',num2str(Vinkel,'%100.2f'),'^{\circ}');
         p1(1).LineWidth = 2;
         p1(1).Color=clrs{m};
-        p1(1).DisplayName=string;
+        %p1(1).DisplayName=string;
         
         
         
-        if 150 > Vinkel && Vinkel >= 0 || 150 > 360-Vinkel && 360-Vinkel >= 0
-            text(real(plot)*1.15,imag(plot)*1.15,[pre ' ' num2str(abs(Laengde),'%100.2f') ' '  enhed ' {\angle} ' num2str(Vinkel,'%100.2f') '^{\circ}' ])
-            
-        elseif 360 > Vinkel && Vinkel >= 210 || 360 > 360-Vinkel && 360-Vinkel >= 210
-            text(real(plot)*1.15,imag(plot)*1.15,[pre ' ' num2str(abs(Laengde),'%100.2f') ' ' enhed ' {\angle} ' num2str(Vinkel,'%100.2f') '^{\circ}' ])
-            
-        elseif 210 > Vinkel && Vinkel >= 150 || 210 > 360-Vinkel && 360-Vinkel >= 150
-            text(real(plot)*1.15,imag(plot)*1.15,[pre ' ' num2str(abs(Laengde),'%100.2f') ' '  enhed ' {\angle} ' num2str(Vinkel,'%100.2f') '^{\circ}' ])
-            
-        elseif Vinkel < 0 || 360-Vinkel < 0
-            
-            
-        else
-            msg = 'Error occurred.';
-            error(msg)
-            
-            
-        end
-        text(real(plot)*1.15,imag(plot)*1.15,[pre ' ' num2str(abs(Laengde),'%100.2f') ' ' enhed ' {\angle} ' num2str(Vinkel,'%100.2f') '^{\circ}' ])
+        
+        text(real(plot)*1.15,imag(plot)*1.15,[pre])
     end
     hold off
-else
-    msg = 'Error occurred.';
-    error(msg)
-    hold off
+
+    
 end
 hold off
 
@@ -219,6 +198,53 @@ firstthis = 0;
 subplot(2,1,2)
 
 for k=1:1:nargin
+    str=inputname(k);
+    sammenlign = regexpi(str,'[a-z]+','match','once');
+    if contains(sammenlign,'v','IgnoreCase',true)
+            Scale = 1;
+            enhed = 'V';
+            pre = strcat(str, ': ');
+        elseif contains(sammenlign,'I','IgnoreCase',true)
+            Scale = 1;
+            enhed = 'A';
+            pre = strcat(str, ': ');
+            
+        elseif contains(sammenlign,'X','IgnoreCase',true)
+            Scale = 1;
+            enhed = '\Omega';
+            if Vinkel > 0
+                pre='X_L:' ;
+            elseif Vinkel < 0
+                pre='X_C:' ;
+            else
+                msg = 'Error occurred.';
+                error(msg)
+            end
+        elseif contains(sammenlign,'S','IgnoreCase',true)
+            Scale = 1;
+            enhed = 'VA';
+            pre = strcat(str, ': ');
+        elseif contains(sammenlign,'Q','IgnoreCase',true)
+            Scale = 1;
+            enhed = 'VAr';
+            pre = strcat(str, ': ');
+        elseif contains(sammenlign,'P','IgnoreCase',true)
+            Scale = 1;
+            enhed = 'W';
+            pre = strcat(str, ': ');
+        elseif contains(sammenlign,'R','IgnoreCase',true)
+            Scale = 1;
+            enhed = '\Omega';
+            pre = strcat(str, ': ');
+        elseif contains(sammenlign,'Z','IgnoreCase',true)
+            Scale = 1;
+            enhed = '\Omega';
+            pre = strcat(str, ': ');
+        else
+            Scale = 1;
+            enhed = ' ';
+            pre = strcat(str, ': ');
+        end
     
     BB = varargin{k};
     Vinkel1 = BB(2);
@@ -227,7 +253,8 @@ for k=1:1:nargin
     
     xt = @(t) Laengde1.*sin(2*pi*t-(deg2rad(Vinkel1)));
     p2=fplot(xt,[0 2]);
-    
+    string=strcat(num2str(Laengde1,'%100.2f'),' \angle ',num2str(Vinkel1,'%100.2f'),'^{\circ}');
+    string1=strcat(pre, 32 ,num2str(abs(Laengde1),'%100.2f'),  32 , enhed ,  32 ,' {\angle} ', num2str(Vinkel1,'%100.2f'), '^{\circ}' );
     grid on
     ax = gca;
     ax.XTick =  0:0.25:2;
@@ -235,12 +262,13 @@ for k=1:1:nargin
     
     p2(1).LineWidth = 2;
     p2(1).Color=clrs{k};
+    p2(1).DisplayName=string1;
     
     hold on
 end
 
 hold off
-
+legend show
 
 
 
